@@ -1,0 +1,5 @@
+- logging
+	- date and time stamp
+	- what drafts
+	- how many times each civ has been drafted
+		- per session, per time period, etc.
