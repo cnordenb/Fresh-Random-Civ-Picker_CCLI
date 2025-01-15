@@ -1,5 +1,4 @@
 // Fresh Random Civ Picker
-// (C) Hjoerleif 2024
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -15,9 +14,6 @@ bool parse_int(char *string, int *integer);
 char *civ_name(int index);
 int result(int);
 void resetter(int *);
-void writeToFile(const char* filename, char* content);
-void getCurrentDateTime(char* buffer, size_t bufferSize);
-
 
 int main()
 {
@@ -28,7 +24,7 @@ int main()
 	int available[45];
 	int given_index;
 	bool parsed_correct = true;
-	bool logging = false;
+
 	
 	
 	resetter(&available);
@@ -36,46 +32,11 @@ int main()
 	int iterator = 0;
 	int remaining = 45;
 
-	char answer;
-
-	// Ask the user a question
-	printf("Do you want to enable logging? (y/n): ");
-
-	// Read the user's input
-	scanf_s(" %c", &answer);
-
-	// Check if the entered character is 'y' or 'n'
-	if (answer == 'y' || answer == 'Y') {
-		logging = true;
-		printf("Logging enabled.\n");
-		char dateTimeString[20]; // Buffer to hold the date and time string
-
-		// Get the current date and time
-		getCurrentDateTime(dateTimeString, sizeof(dateTimeString));
-
-		// Print the date and time string
-		//printf("Current Date and Time: %s\n", dateTimeString);
-		const char* filename = "log.txt";
-		char* content = dateTimeString;
-		writeToFile(filename, content);
-	}
-	else if (answer == 'n' || answer == 'N') {
-		printf("Logging disabled.\n");
-	}
-	else {
-		printf("Invalid input. Please enter 'y' or 'n'.\n");
-	}
 
 	do
 	{
 		do
 		{
-			
-		
-
-
-			
-
 
 			printf("\nEnter 1 to receive a fresh random civ, 0 to reset, or -1 to quit: ");
 			char buffer[BUFFER_SIZE];
@@ -110,13 +71,7 @@ int main()
 				j++;
 
 			}
-			printf("\n%s (current set: %d/%d)\n", civ_name(given_index), iterator + 1, 45);
-			if (logging)
-			{
-				const char *filename = "log.txt";
-				char *content = civ_name(given_index) + '\n';
-				writeToFile(filename, content);
-			}
+			printf("\n%s (current set: %d/%d)\n", civ_name(given_index), iterator + 1, 45);			
 			available[given_index] = 0;
 			iterator++;
 			remaining--;
@@ -268,35 +223,4 @@ void resetter(int *ptr)
 	{
 		ptr[i] = 1;
 	}
-}
-
-
-
-void writeToFile(const char* filename, char* content) {
-	// Open the file for writing ("w" mode)
-	FILE* file = fopen(filename, "a");
-
-	// Check if the file was opened successfully
-	if (file == NULL) {
-		perror("Error opening file");
-		return;
-	}
-
-	// Write the content to the file
-	fprintf(file, "%s", content);
-	fprintf(file, "\n");
-
-	// Close the file
-	fclose(file);
-}
-
-void getCurrentDateTime(char* buffer, size_t bufferSize) {
-	// Get the current time
-	time_t now = time(NULL);
-
-	// Convert it to local time representation
-	struct tm* localTime = localtime(&now);
-
-	// Format the time as a string
-	strftime(buffer, bufferSize, "%Y-%m-%d %H:%M:%S", localTime);
 }
